@@ -22,6 +22,7 @@
 #include "adc.h"
 #include "dma.h"
 #include "spi.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -47,6 +48,7 @@
 
 /* USER CODE BEGIN PV */
 int count=0;
+char msg[10];
 
 /* USER CODE END PV */
 
@@ -95,6 +97,7 @@ int main(void)
   MX_ADC2_Init();
   MX_ADC3_Init();
   MX_ADC4_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -104,11 +107,15 @@ int main(void)
   while (1)
   {
 
+	  sprintf(msg, "%hu\r\n", count);
+	  HAL_UART_Transmit(&huart3, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
 
+
+	  count++;
 	  printf("count = %d" , count);
 
 
-	  HAL_Delay(1000);
+	  HAL_Delay(500);
 
     /* USER CODE END WHILE */
 
@@ -154,7 +161,9 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12|RCC_PERIPHCLK_ADC34;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART3|RCC_PERIPHCLK_ADC12
+                              |RCC_PERIPHCLK_ADC34;
+  PeriphClkInit.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
   PeriphClkInit.Adc12ClockSelection = RCC_ADC12PLLCLK_DIV1;
   PeriphClkInit.Adc34ClockSelection = RCC_ADC34PLLCLK_DIV1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
