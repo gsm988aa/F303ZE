@@ -107,7 +107,7 @@ int main(void)
   while (1)
   {
 
-	  sprintf(msg, "%hu\r\n", count);
+//	  sprintf(msg, "%hu\r\n", count);
 	  HAL_UART_Transmit(&huart3, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
 
 
