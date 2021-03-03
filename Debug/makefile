@@ -61,8 +61,8 @@ all: main-build
 main-build: F303ZE.elf secondary-outputs
 
 # Tool invocations
-F303ZE.elf: $(OBJS) $(USER_OBJS) /Users/siminggao/STM32CubeIDE/workspace_1.6.0/f303/F303ZE/STM32F303ZETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "F303ZE.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/siminggao/STM32CubeIDE/workspace_1.6.0/f303/F303ZE/STM32F303ZETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F303ZE.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+F303ZE.elf: $(OBJS) $(USER_OBJS) /home/g/STM32CubeIDE/workspace_1.5.0/F303ZE/STM32F303ZETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "F303ZE.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/g/STM32CubeIDE/workspace_1.5.0/F303ZE/STM32F303ZETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F303ZE.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -28,6 +28,22 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
+#include "string.h"
+
+
+//
+#ifdef __GNUC__
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif
+PUTCHAR_PROTOTYPE
+{
+	HAL_UART_Transmit(&huart2 , (uint8_t *)&ch, 1, 0xFFFF);
+	return ch;
+}
+// char msg[10];
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,8 +63,23 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-int count=0;
-char msg[10];
+// int count=0;
+// char msg[10];
+__IO uint32_t uhADCxConvertedValue[11];
+
+
+uint32_t ADC_Value[110];
+uint32_t ADC_Value2[70];
+uint32_t ADC_Value3[150];
+uint32_t ADC_Value4[70];
+uint8_t ADC_Convert_Value[20];
+uint8_t ADC_Convert_Value2[20];
+uint8_t ADC_Convert_Value3[20];
+uint8_t ADC_Convert_Value4[20];
+uint16_t i;
+uint32_t ad1,ad2;
+uint32_t  ad3,ad4;
+uint32_t ad10,ad5,ad6,ad7,ad8,ad9,ad11;
 
 /* USER CODE END PV */
 
@@ -70,7 +101,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,30 +128,117 @@ int main(void)
   MX_ADC2_Init();
   MX_ADC3_Init();
   MX_ADC4_Init();
-  MX_USART3_UART_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
+
+	
+	printf(" \n" );
+	printf("F303 initialized ok\n" );
+
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&uhADCxConvertedValue, 100);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	while (1)
+	{
+		
+		// for(i = 0,ad1 =0,ad2=0,ad3=0,ad4=0,ad5 =0,ad6=0,ad7=0,ad8=0,ad9 =0,ad10=0,ad11=0; i < 110;)
+		// {
+		// 	ad1 += ADC_Value[i++];
+		// 	ad2 += ADC_Value[i++];
+		// 	ad3 += ADC_Value[i++];
+		// 	ad4 += ADC_Value[i++];
+		// 	ad5 += ADC_Value[i++];
+		// 	ad6 += ADC_Value[i++];
+		// 	ad7 += ADC_Value[i++];
+		// 	ad8 += ADC_Value[i++];
+		// 	ad9 += ADC_Value[i++];
+		// 	ad10 += ADC_Value[i++];
+		// 	ad11 += ADC_Value[i++];
+		printf(" info:ADC1_chanel0_value=%ld \r\n", uhADCxConvertedValue[0] );
+		printf(" info:ADC1_chanel1_value=%ld \r\n", uhADCxConvertedValue[1] );
+		printf(" info:ADC1_chanel2_value=%ld \r\n", uhADCxConvertedValue[2] );
+		printf(" info:ADC1_chanel3_value=%ld \r\n", uhADCxConvertedValue[3] );
+		printf(" info:ADC1_chanel4_value=%ld \r\n", uhADCxConvertedValue[4] );
+		printf(" info:ADC1_chanel5_value=%ld \r\n", uhADCxConvertedValue[5] );
+		printf(" info:ADC1_chanel6_value=%ld \r\n", uhADCxConvertedValue[6] );
+		printf(" info:ADC1_chanel7_value=%ld \r\n", uhADCxConvertedValue[7] );
+		printf(" info:ADC1_chanel8_value=%ld \r\n", uhADCxConvertedValue[8] );
+		printf(" info:ADC1_chanel9_value=%ld \r\n", uhADCxConvertedValue[9] );
+		printf(" info:ADC1_chanel10_value=%ld \r\n", uhADCxConvertedValue[10] );
+		printf("  \n" );
+		HAL_Delay(1000);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[1]);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[2]);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[3]);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[4]);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[5]);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[6]);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[7]);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[8]);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[9]);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[10]);
+		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[11]);
+		// 	printf("\n");
+		// }
+		// ad1 /= 10;
+		// ad2 /= 10;
+		// ad3 /= 10;
+		// ad4 /= 10;
+		// ad5 /= 10;
+		// ad6 /= 10;
+		// ad7 /= 10;
+		// ad8 /= 10;
+		// ad9 /= 10;
+		// ad10 /= 10;
+		// ad11 /= 10;
 
-//	  sprintf(msg, "%hu\r\n", count);
-	  HAL_UART_Transmit(&huart3, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
 
 
-	  count++;
-	  printf("count = %d" , count);
+
+		// printf(" info:ADC1_chanel1_value=%ld \r\n", ad1);
+		// printf(" info:ADC1_chanel2_value=%ld \r\n", ad2);
+		// printf("\n");
 
 
-	  HAL_Delay(500);
+	  		// ADC_Convert_Value[1]=(ad1>>8) & 0x0f;//high
+	    // 	ADC_Convert_Value[0]=ad1&0xff; //low
+
+	  		// ADC_Convert_Value[3]=(ad2>>8) & 0x0f;//high
+	    // 	ADC_Convert_Value[2]=ad2&0xff; //low
+	    	// HAL_SPI_Transmit_DMA (&hspi1, ADC_Convert_Value, 10);
+
+
+//	  		ADC_Convert_Value[5]=(ad3>>8) & 0x0f;//high
+//	    	ADC_Convert_Value[4]=ad3&0xff; //low
+//
+//	  		ADC_Convert_Value[7]=(ad4>>8) & 0x0f;//high
+//	    	ADC_Convert_Value[6]=ad4&0xff; //low
+//
+//	  		ADC_Convert_Value[9]=(ad5>>8) & 0x0f;//high
+//	    	ADC_Convert_Value[8]=ad5&0xff; //low
+//
+//	  		ADC_Convert_Value[11]=(ad6>>8) & 0x0f;//high
+//	    	ADC_Convert_Value[10]=ad6&0xff; //low
+//
+//	  		ADC_Convert_Value[13]=(ad7>>8) & 0x0f;//high
+//	    	ADC_Convert_Value[12]=ad7&0xff; //low
+//
+//	  		ADC_Convert_Value[15]=(ad8>>8) & 0x0f;//high
+//	    	ADC_Convert_Value[14]=ad8&0xff; //low
+//
+//	  		ADC_Convert_Value[17]=(ad9>>8) & 0x0f;//high
+//	    	ADC_Convert_Value[16]=ad9&0xff; //low
+//
+//	  		ADC_Convert_Value[19]=(ad10>>8) & 0x0f;//high
+//	    	ADC_Convert_Value[18]=ad10&0xff; //low
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	}
   /* USER CODE END 3 */
 }
 
@@ -161,9 +279,9 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART3|RCC_PERIPHCLK_ADC12
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2|RCC_PERIPHCLK_ADC12
                               |RCC_PERIPHCLK_ADC34;
-  PeriphClkInit.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
+  PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
   PeriphClkInit.Adc12ClockSelection = RCC_ADC12PLLCLK_DIV1;
   PeriphClkInit.Adc34ClockSelection = RCC_ADC34PLLCLK_DIV1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -184,10 +302,10 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	__disable_irq();
+	while (1)
+	{
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 
