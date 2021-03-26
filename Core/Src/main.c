@@ -68,18 +68,24 @@ PUTCHAR_PROTOTYPE
 __IO uint32_t uhADCxConvertedValue[11];
 
 
-uint32_t ADC_Value[110];
-uint32_t ADC_Value2[70];
-uint32_t ADC_Value3[150];
-uint32_t ADC_Value4[70];
-uint8_t ADC_Convert_Value[20];
-uint8_t ADC_Convert_Value2[20];
-uint8_t ADC_Convert_Value3[20];
-uint8_t ADC_Convert_Value4[20];
+uint32_t ADC1_Value[110];
+uint32_t ADC2_Value[70];
+uint32_t ADC3_Value[150];
+uint32_t ADC4_Value[70];
+// uint8_t ADC_Convert_Value[20];
+// uint8_t ADC_Convert_Value2[20];
+// uint8_t ADC_Convert_Value3[20];
+// uint8_t ADC_Convert_Value4[20];
 uint16_t i;
-uint32_t ad1,ad2;
-uint32_t  ad3,ad4;
-uint32_t ad10,ad5,ad6,ad7,ad8,ad9,ad11;
+uint32_t ADC1Channel1,ADC1Channel2,ADC1Channel3,ADC1Channel4,ADC1Channel10,ADC1Channel5,ADC1Channel6,ADC1Channel7,ADC1Channel8,ADC1Channel9,ADC1Channel11;
+
+uint32_t ADC2Channel1,ADC2Channel2,ADC2Channel3,ADC2Channel4,ADC2Channel10,ADC2Channel5,ADC2Channel6,ADC2Channel7;
+
+uint32_t ADC3Channel1,ADC3Channel2,ADC3Channel3,ADC3Channel4,ADC3Channel10,ADC3Channel5,ADC3Channel6,ADC3Channel7,ADC3Channel8,ADC3Channel9,ADC3Channel11,ADC3Channel12,ADC3Channel13,ADC3Channel14,ADC3Channel15;
+
+uint32_t ADC4Channel1,ADC4Channel2,ADC4Channel3,ADC4Channel4,ADC4Channel10,ADC4Channel5,ADC4Channel6,ADC4Channel7;
+
+
 
 /* USER CODE END PV */
 
@@ -141,33 +147,109 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	while (1)
 	{
-		HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&ADC_Value, 110);
-		for(i = 0,ad1 =0,ad2=0,ad3=0,ad4=0,ad5 =0,ad6=0,ad7=0,ad8=0,ad9 =0,ad10=0,ad11=0; i < 110;)
+		HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&ADC1_Value, 110);
+		for(i = 0,ADC1Channel1 =0,ADC1Channel2=0,ADC1Channel3=0,ADC1Channel4=0,ADC1Channel5 =0,ADC1Channel6=0,ADC1Channel7=0,ADC1Channel8=0,ADC1Channel9 =0,ADC1Channel10=0,ADC1Channel11=0; i < 110;)
 		{
-			ad1 += ADC_Value[i++];
-			ad2 += ADC_Value[i++];
-			ad3 += ADC_Value[i++];
-      ad4 += ADC_Value[i++];
-      ad5 += ADC_Value[i++];
-      ad6 += ADC_Value[i++];
-      ad7 += ADC_Value[i++];
-      ad8 += ADC_Value[i++];
-      ad9 += ADC_Value[i++];
-      ad10 += ADC_Value[i++];
-      ad11 += ADC_Value[i++];
+      ADC1Channel1 += ADC1_Value[i++];
+      ADC1Channel2 += ADC1_Value[i++];
+      ADC1Channel3 += ADC1_Value[i++];
+      ADC1Channel4 += ADC1_Value[i++];
+      ADC1Channel5 += ADC1_Value[i++];
+      ADC1Channel6 += ADC1_Value[i++];
+      ADC1Channel7 += ADC1_Value[i++];
+      ADC1Channel8 += ADC1_Value[i++];
+      ADC1Channel9 += ADC1_Value[i++];
+      ADC1Channel10 += ADC1_Value[i++];
+      ADC1Channel11 += ADC1_Value[i++];
     }
-    
-     ad1 /= 10;
-     ad2 /= 10;
-     ad3 /= 10;
-     ad4 /= 10;
-     ad5 /= 10;
-     ad6 /= 10;
-     ad7 /= 10;
-     ad8 /= 10;
-     ad9 /= 10;
-     ad10 /= 10;
-     ad11 /= 10;
+     ADC1Channel1 /= 10;
+     ADC1Channel2 /= 10;
+     ADC1Channel3 /= 10;
+     ADC1Channel4 /= 10;
+     ADC1Channel5 /= 10;
+     ADC1Channel6 /= 10;
+     ADC1Channel7 /= 10;
+     ADC1Channel8 /= 10;
+     ADC1Channel9 /= 10;
+     ADC1Channel10 /= 10;
+     ADC1Channel11 /= 10;
+     HAL_Delay(50);
+     // 11 7  15  7
+     HAL_ADC_Start_DMA(&hadc2, (uint32_t*)&ADC2_Value, 70);
+    for(i = 0,ADC2Channel1 =0,ADC2Channel2=0,ADC2Channel3=0,ADC2Channel4=0,ADC2Channel5 =0,ADC2Channel6=0,ADC2Channel7=0; i < 70;)
+    {
+      ADC2Channel1 += ADC2_Value[i++];
+      ADC2Channel2 += ADC2_Value[i++];
+      ADC2Channel3 += ADC2_Value[i++];
+      ADC2Channel4 += ADC2_Value[i++];
+      ADC2Channel5 += ADC2_Value[i++];
+      ADC2Channel6 += ADC2_Value[i++];
+      ADC2Channel7 += ADC2_Value[i++];
+    }
+     ADC2Channel1 /= 10;
+     ADC2Channel2 /= 10;
+     ADC2Channel3 /= 10;
+     ADC2Channel4 /= 10;
+     ADC2Channel5 /= 10;
+     ADC2Channel6 /= 10;
+     ADC2Channel7 /= 10;
+     HAL_Delay(50);
+    HAL_ADC_Start_DMA(&hadc3, (uint32_t*)&ADC3_Value, 150);
+    for(i = 0,ADC3Channel1 =0,ADC3Channel2=0,ADC3Channel3=0,ADC3Channel4=0,ADC3Channel5 =0,ADC3Channel6=0,ADC3Channel7=0,ADC3Channel8=0,ADC3Channel9 =0,ADC3Channel10=0,ADC3Channel11=0,ADC3Channel12=0,ADC3Channel13=0,ADC3Channel14=0,ADC3Channel15 =0; i < 150;)
+    {
+      ADC3Channel1 += ADC3_Value[i++];
+      ADC3Channel2 += ADC3_Value[i++];
+      ADC3Channel3 += ADC3_Value[i++];
+      ADC3Channel4 += ADC3_Value[i++];
+      ADC3Channel5 += ADC3_Value[i++];
+      ADC3Channel6 += ADC3_Value[i++];
+      ADC3Channel7 += ADC3_Value[i++];
+      ADC3Channel8 += ADC3_Value[i++];
+      ADC3Channel9 += ADC3_Value[i++];
+      ADC3Channel10 += ADC3_Value[i++];
+      ADC3Channel11 += ADC3_Value[i++];
+      ADC3Channel12 += ADC3_Value[i++];
+      ADC3Channel13 += ADC3_Value[i++];
+      ADC3Channel14 += ADC3_Value[i++];
+      ADC3Channel15 += ADC3_Value[i++];
+    }
+     ADC3Channel1 /= 10;
+     ADC3Channel2 /= 10;
+     ADC3Channel3 /= 10;
+     ADC3Channel4 /= 10;
+     ADC3Channel5 /= 10;
+     ADC3Channel6 /= 10;
+     ADC3Channel7 /= 10;
+     ADC3Channel8 /= 10;
+     ADC3Channel9 /= 10;
+     ADC3Channel10 /= 10;
+     ADC3Channel11 /= 10;
+     ADC3Channel12 /= 10;
+     ADC3Channel13 /= 10;
+     ADC3Channel14 /= 10;
+     ADC3Channel15 /= 10;
+     HAL_Delay(50);
+     HAL_ADC_Start_DMA(&hadc4, (uint32_t*)&ADC4_Value, 70);
+    for(i = 0,ADC4Channel1 =0,ADC4Channel2=0,ADC4Channel3=0,ADC4Channel4=0,ADC4Channel5 =0,ADC4Channel6=0,ADC4Channel7=0; i < 70;)
+    {
+      ADC4Channel1 += ADC4_Value[i++];
+      ADC4Channel2 += ADC4_Value[i++];
+      ADC4Channel3 += ADC4_Value[i++];
+      ADC4Channel4 += ADC4_Value[i++];
+      ADC4Channel5 += ADC4_Value[i++];
+      ADC4Channel6 += ADC4_Value[i++];
+      ADC4Channel7 += ADC4_Value[i++];
+    }
+     ADC4Channel1 /= 10;
+     ADC4Channel2 /= 10;
+     ADC4Channel3 /= 10;
+     ADC4Channel4 /= 10;
+     ADC4Channel5 /= 10;
+     ADC4Channel6 /= 10;
+     ADC4Channel7 /= 10;
+     HAL_Delay(50);
+
+     
 
 //      printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[1]);
 //      printf(" info:ADC1_chanel2_value=%ld \r\n", ADC_Value[2]);
@@ -180,22 +262,22 @@ int main(void)
 //      printf(" info:ADC1_chanel9_value=%ld \r\n", ADC_Value[9]);
 //      printf(" info:ADC1_chanel10_value=%ld \r\n", ADC_Value[10]);
 //      printf(" info:ADC1_chanel11_value=%ld \r\n", ADC_Value[11]);
-    printf(" info:ADC1_chanel1_value=%ld \r\n", ad1);
-    printf(" info:ADC1_chanel2_value=%ld \r\n", ad2);
-    printf(" info:ADC1_chanel3_value=%ld \r\n", ad3);
-    printf(" info:ADC1_chanel4_value=%ld \r\n", ad4);
-    printf(" info:ADC1_chanel5_value=%ld \r\n", ad5);
-    printf(" info:ADC1_chanel6_value=%ld \r\n", ad6);
-    printf(" info:ADC1_chanel7_value=%ld \r\n", ad7);
-    printf(" info:ADC1_chanel8_value=%ld \r\n", ad8);
-    printf(" info:ADC1_chanel9_value=%ld \r\n", ad9);
-    printf(" info:ADC1_chanel10_value=%ld \r\n", ad10);
-    printf(" info:ADC1_chanel11_value=%ld \r\n", ad11);
-    printf(" info:ADC1V_chanel9_value=%ld \r\n", ADC_Value[9]);
-    printf(" info:ADC1V_chanel10_value=%ld \r\n", ADC_Value[10]);
-    printf(" info:ADC1V_chanel11_value=%ld \r\n", ADC_Value[11]);
-    printf(" info:ADC1V_chanel0_value=%ld \r\n", ADC_Value[0]);
-		HAL_Delay(50);
+    // printf(" info:ADC1_chanel1_value=%ld \r\n", ad1);
+    // printf(" info:ADC1_chanel2_value=%ld \r\n", ad2);
+    // printf(" info:ADC1_chanel3_value=%ld \r\n", ad3);
+    // printf(" info:ADC1_chanel4_value=%ld \r\n", ad4);
+    // printf(" info:ADC1_chanel5_value=%ld \r\n", ad5);
+    // printf(" info:ADC1_chanel6_value=%ld \r\n", ad6);
+    // printf(" info:ADC1_chanel7_value=%ld \r\n", ad7);
+    // printf(" info:ADC1_chanel8_value=%ld \r\n", ad8);
+    // printf(" info:ADC1_chanel9_value=%ld \r\n", ad9);
+    // printf(" info:ADC1_chanel10_value=%ld \r\n", ad10);
+    // printf(" info:ADC1_chanel11_value=%ld \r\n", ad11);
+    // printf(" info:ADC1V_chanel9_value=%ld \r\n", ADC_Value[9]);
+    // printf(" info:ADC1V_chanel10_value=%ld \r\n", ADC_Value[10]);
+    // printf(" info:ADC1V_chanel11_value=%ld \r\n", ADC_Value[11]);
+    // printf(" info:ADC1V_chanel0_value=%ld \r\n", ADC_Value[0]);
+
 	}
 		// 	printf("\n");
 		// }
