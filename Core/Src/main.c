@@ -29,7 +29,7 @@
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "string.h"
-
+#include "stdlib.h"
 
 //
 #ifdef __GNUC__
@@ -131,72 +131,74 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
+//	printf(" \n" );
+//	printf("F303 initialized ok\n" );
 
-	
-	printf(" \n" );
-	printf("F303 initialized ok\n" );
 
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&uhADCxConvertedValue, 100);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1)
 	{
-		
-		// for(i = 0,ad1 =0,ad2=0,ad3=0,ad4=0,ad5 =0,ad6=0,ad7=0,ad8=0,ad9 =0,ad10=0,ad11=0; i < 110;)
-		// {
-		// 	ad1 += ADC_Value[i++];
-		// 	ad2 += ADC_Value[i++];
-		// 	ad3 += ADC_Value[i++];
-		// 	ad4 += ADC_Value[i++];
-		// 	ad5 += ADC_Value[i++];
-		// 	ad6 += ADC_Value[i++];
-		// 	ad7 += ADC_Value[i++];
-		// 	ad8 += ADC_Value[i++];
-		// 	ad9 += ADC_Value[i++];
-		// 	ad10 += ADC_Value[i++];
-		// 	ad11 += ADC_Value[i++];
-		printf(" info:ADC1_chanel0_value=%ld \r\n", uhADCxConvertedValue[0] );
-		printf(" info:ADC1_chanel1_value=%ld \r\n", uhADCxConvertedValue[1] );
-		printf(" info:ADC1_chanel2_value=%ld \r\n", uhADCxConvertedValue[2] );
-		printf(" info:ADC1_chanel3_value=%ld \r\n", uhADCxConvertedValue[3] );
-		printf(" info:ADC1_chanel4_value=%ld \r\n", uhADCxConvertedValue[4] );
-		printf(" info:ADC1_chanel5_value=%ld \r\n", uhADCxConvertedValue[5] );
-		printf(" info:ADC1_chanel6_value=%ld \r\n", uhADCxConvertedValue[6] );
-		printf(" info:ADC1_chanel7_value=%ld \r\n", uhADCxConvertedValue[7] );
-		printf(" info:ADC1_chanel8_value=%ld \r\n", uhADCxConvertedValue[8] );
-		printf(" info:ADC1_chanel9_value=%ld \r\n", uhADCxConvertedValue[9] );
-		printf(" info:ADC1_chanel10_value=%ld \r\n", uhADCxConvertedValue[10] );
-		printf("  \n" );
-		HAL_Delay(1000);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[1]);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[2]);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[3]);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[4]);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[5]);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[6]);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[7]);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[8]);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[9]);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[10]);
-		// 	printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[11]);
+		HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&ADC_Value, 110);
+		for(i = 0,ad1 =0,ad2=0,ad3=0,ad4=0,ad5 =0,ad6=0,ad7=0,ad8=0,ad9 =0,ad10=0,ad11=0; i < 110;)
+		{
+			ad1 += ADC_Value[i++];
+			ad2 += ADC_Value[i++];
+			ad3 += ADC_Value[i++];
+      ad4 += ADC_Value[i++];
+      ad5 += ADC_Value[i++];
+      ad6 += ADC_Value[i++];
+      ad7 += ADC_Value[i++];
+      ad8 += ADC_Value[i++];
+      ad9 += ADC_Value[i++];
+      ad10 += ADC_Value[i++];
+      ad11 += ADC_Value[i++];
+    }
+    
+     ad1 /= 10;
+     ad2 /= 10;
+     ad3 /= 10;
+     ad4 /= 10;
+     ad5 /= 10;
+     ad6 /= 10;
+     ad7 /= 10;
+     ad8 /= 10;
+     ad9 /= 10;
+     ad10 /= 10;
+     ad11 /= 10;
+
+//      printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[1]);
+//      printf(" info:ADC1_chanel2_value=%ld \r\n", ADC_Value[2]);
+//      printf(" info:ADC1_chanel3_value=%ld \r\n", ADC_Value[3]);
+//      printf(" info:ADC1_chanel4_value=%ld \r\n", ADC_Value[4]);
+//      printf(" info:ADC1_chanel5_value=%ld \r\n", ADC_Value[5]);
+//      printf(" info:ADC1_chanel6_value=%ld \r\n", ADC_Value[6]);
+//      printf(" info:ADC1_chanel7_value=%ld \r\n", ADC_Value[7]);
+//      printf(" info:ADC1_chanel8_value=%ld \r\n", ADC_Value[8]);
+//      printf(" info:ADC1_chanel9_value=%ld \r\n", ADC_Value[9]);
+//      printf(" info:ADC1_chanel10_value=%ld \r\n", ADC_Value[10]);
+//      printf(" info:ADC1_chanel11_value=%ld \r\n", ADC_Value[11]);
+    printf(" info:ADC1_chanel1_value=%ld \r\n", ad1);
+    printf(" info:ADC1_chanel2_value=%ld \r\n", ad2);
+    printf(" info:ADC1_chanel3_value=%ld \r\n", ad3);
+    printf(" info:ADC1_chanel4_value=%ld \r\n", ad4);
+    printf(" info:ADC1_chanel5_value=%ld \r\n", ad5);
+    printf(" info:ADC1_chanel6_value=%ld \r\n", ad6);
+    printf(" info:ADC1_chanel7_value=%ld \r\n", ad7);
+    printf(" info:ADC1_chanel8_value=%ld \r\n", ad8);
+    printf(" info:ADC1_chanel9_value=%ld \r\n", ad9);
+    printf(" info:ADC1_chanel10_value=%ld \r\n", ad10);
+    printf(" info:ADC1_chanel11_value=%ld \r\n", ad11);
+    printf(" info:ADC1V_chanel9_value=%ld \r\n", ADC_Value[9]);
+    printf(" info:ADC1V_chanel10_value=%ld \r\n", ADC_Value[10]);
+    printf(" info:ADC1V_chanel11_value=%ld \r\n", ADC_Value[11]);
+    printf(" info:ADC1V_chanel0_value=%ld \r\n", ADC_Value[0]);
+		HAL_Delay(50);
+	}
 		// 	printf("\n");
 		// }
-		// ad1 /= 10;
-		// ad2 /= 10;
-		// ad3 /= 10;
-		// ad4 /= 10;
-		// ad5 /= 10;
-		// ad6 /= 10;
-		// ad7 /= 10;
-		// ad8 /= 10;
-		// ad9 /= 10;
-		// ad10 /= 10;
-		// ad11 /= 10;
-
-
-
 
 		// printf(" info:ADC1_chanel1_value=%ld \r\n", ad1);
 		// printf(" info:ADC1_chanel2_value=%ld \r\n", ad2);
@@ -238,7 +240,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	}
+	
   /* USER CODE END 3 */
 }
 
