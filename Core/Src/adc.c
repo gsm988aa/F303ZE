@@ -703,7 +703,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
 
     /* ADC2 DMA Init */
     /* ADC2 Init */
-    hdma_adc2.Instance = DMA2_Channel1;
+    hdma_adc2.Instance = DMA2_Channel3;
     hdma_adc2.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma_adc2.Init.PeriphInc = DMA_PINC_DISABLE;
     hdma_adc2.Init.MemInc = DMA_MINC_ENABLE;
@@ -715,6 +715,8 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     {
       Error_Handler();
     }
+
+    __HAL_DMA_REMAP_CHANNEL_ENABLE(HAL_REMAPDMA_ADC24_DMA2_CH34);
 
     __HAL_LINKDMA(adcHandle,DMA_Handle,hdma_adc2);
 
@@ -831,7 +833,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
 
     /* ADC4 DMA Init */
     /* ADC4 Init */
-    hdma_adc4.Instance = DMA2_Channel2;
+    hdma_adc4.Instance = DMA2_Channel4;
     hdma_adc4.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma_adc4.Init.PeriphInc = DMA_PINC_DISABLE;
     hdma_adc4.Init.MemInc = DMA_MINC_ENABLE;
@@ -843,6 +845,8 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     {
       Error_Handler();
     }
+
+    __HAL_DMA_REMAP_CHANNEL_ENABLE(HAL_REMAPDMA_ADC24_DMA2_CH34);
 
     __HAL_LINKDMA(adcHandle,DMA_Handle,hdma_adc4);
 

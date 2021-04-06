@@ -39,8 +39,8 @@
 #endif
 PUTCHAR_PROTOTYPE
 {
-	HAL_UART_Transmit(&huart2 , (uint8_t *)&ch, 1, 0xFFFF);
-	return ch;
+  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+  return ch;
 }
 // char msg[10];
 
@@ -67,7 +67,6 @@ PUTCHAR_PROTOTYPE
 // char msg[10];
 __IO uint32_t uhADCxConvertedValue[11];
 
-
 uint32_t ADC1_Value[110];
 uint32_t ADC2_Value[70];
 uint32_t ADC3_Value[150];
@@ -76,15 +75,48 @@ uint32_t ADC4_Value[70];
 // uint8_t ADC_Convert_Value2[20];
 // uint8_t ADC_Convert_Value3[20];
 // uint8_t ADC_Convert_Value4[20];
-uint16_t i;
-uint32_t ADC1Channel1,ADC1Channel2,ADC1Channel3,ADC1Channel4,ADC1Channel10,ADC1Channel5,ADC1Channel6,ADC1Channel7,ADC1Channel8,ADC1Channel9,ADC1Channel11;
+uint16_t i, j;
+uint32_t ADC1Channel1, ADC1Channel2, ADC1Channel3, ADC1Channel4, ADC1Channel5, ADC1Channel6, ADC1Channel7, ADC1Channel8, ADC1Channel9, ADC1Channel10, ADC1Channel11;
 
-uint32_t ADC2Channel1,ADC2Channel2,ADC2Channel3,ADC2Channel4,ADC2Channel10,ADC2Channel5,ADC2Channel6,ADC2Channel7;
+uint32_t ADC2Channel1, ADC2Channel2, ADC2Channel3, ADC2Channel4, ADC2Channel5, ADC2Channel6, ADC2Channel7;
 
-uint32_t ADC3Channel1,ADC3Channel2,ADC3Channel3,ADC3Channel4,ADC3Channel10,ADC3Channel5,ADC3Channel6,ADC3Channel7,ADC3Channel8,ADC3Channel9,ADC3Channel11,ADC3Channel12,ADC3Channel13,ADC3Channel14,ADC3Channel15;
+uint32_t ADC3Channel1, ADC3Channel2, ADC3Channel3, ADC3Channel4, ADC3Channel5, ADC3Channel6, ADC3Channel7, ADC3Channel8, ADC3Channel9, ADC3Channel10, ADC3Channel11, ADC3Channel12, ADC3Channel13, ADC3Channel14, ADC3Channel15;
 
-uint32_t ADC4Channel1,ADC4Channel2,ADC4Channel3,ADC4Channel4,ADC4Channel10,ADC4Channel5,ADC4Channel6,ADC4Channel7;
+uint32_t ADC4Channel1, ADC4Channel2, ADC4Channel3, ADC4Channel4, ADC4Channel5, ADC4Channel6, ADC4Channel7;
 
+uint16_t ADCsum_Value[82],midvalue; //all 40 Channels
+uint8_t ADCconvert_Value[82]; // for DMA SPI Transmitt
+
+// choose a MCU-Header    "1101" = 1-Slave,  1-board number, 0-nothing, 1-device_id
+uint16_t Slaveboard1_dev_id1 = 1101;
+//uint32_t Slaveboard1_dev_id2 = 1102;
+//uint32_t Slaveboard1_dev_id3 = 1103;
+//uint32_t Slaveboard1_dev_id4 = 1104;
+//uint32_t Slaveboard1_dev_id5 = 1105;
+
+//uint32_t Slaveboard2_dev_id1 = 1201;
+//uint32_t Slaveboard2_dev_id2 = 1202;
+//uint32_t Slaveboard2_dev_id3 = 1203;
+//uint32_t Slaveboard2_dev_id4 = 1204;
+//uint32_t Slaveboard2_dev_id5 = 1205;
+
+//uint32_t Slaveboard3_dev_id1 = 1301;
+//uint32_t Slaveboard3_dev_id2 = 1302;
+//uint32_t Slaveboard3_dev_id3 = 1303;
+//uint32_t Slaveboard3_dev_id4 = 1304;
+//uint32_t Slaveboard3_dev_id5 = 1305;
+
+//uint32_t Slaveboard4_dev_id1 = 1401;
+//uint32_t Slaveboard4_dev_id2 = 1402;
+//uint32_t Slaveboard4_dev_id3 = 1403;
+//uint32_t Slaveboard4_dev_id4 = 1404;
+//uint32_t Slaveboard4_dev_id5 = 1405;
+
+//uint32_t Slaveboard5_dev_id1 = 1501;
+//uint32_t Slaveboard5_dev_id2 = 1502;
+//uint32_t Slaveboard5_dev_id3 = 1503;
+//uint32_t Slaveboard5_dev_id4 = 1504;
+//uint32_t Slaveboard5_dev_id5 = 1505;
 
 
 /* USER CODE END PV */
@@ -107,7 +139,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -129,27 +161,24 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_SPI1_Init();
   MX_ADC1_Init();
   MX_ADC2_Init();
   MX_ADC3_Init();
   MX_ADC4_Init();
   MX_USART2_UART_Init();
+  MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
-
-//	printf(" \n" );
-//	printf("F303 initialized ok\n" );
 
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	while (1)
-	{
-		HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&ADC1_Value, 110);
-		for(i = 0,ADC1Channel1 =0,ADC1Channel2=0,ADC1Channel3=0,ADC1Channel4=0,ADC1Channel5 =0,ADC1Channel6=0,ADC1Channel7=0,ADC1Channel8=0,ADC1Channel9 =0,ADC1Channel10=0,ADC1Channel11=0; i < 110;)
-		{
+  while (1)
+  {
+    HAL_ADC_Start_DMA(&hadc1, (uint32_t *)&ADC1_Value, 110);
+    for (i = 0, ADC1Channel1 = 0, ADC1Channel2 = 0, ADC1Channel3 = 0, ADC1Channel4 = 0, ADC1Channel5 = 0, ADC1Channel6 = 0, ADC1Channel7 = 0, ADC1Channel8 = 0, ADC1Channel9 = 0, ADC1Channel10 = 0, ADC1Channel11 = 0; i < 110;)
+    {
       ADC1Channel1 += ADC1_Value[i++];
       ADC1Channel2 += ADC1_Value[i++];
       ADC1Channel3 += ADC1_Value[i++];
@@ -162,21 +191,21 @@ int main(void)
       ADC1Channel10 += ADC1_Value[i++];
       ADC1Channel11 += ADC1_Value[i++];
     }
-     ADC1Channel1 /= 10;
-     ADC1Channel2 /= 10;
-     ADC1Channel3 /= 10;
-     ADC1Channel4 /= 10;
-     ADC1Channel5 /= 10;
-     ADC1Channel6 /= 10;
-     ADC1Channel7 /= 10;
-     ADC1Channel8 /= 10;
-     ADC1Channel9 /= 10;
-     ADC1Channel10 /= 10;
-     ADC1Channel11 /= 10;
-     HAL_Delay(50);
-     // 11 7  15  7
-     HAL_ADC_Start_DMA(&hadc2, (uint32_t*)&ADC2_Value, 70);
-    for(i = 0,ADC2Channel1 =0,ADC2Channel2=0,ADC2Channel3=0,ADC2Channel4=0,ADC2Channel5 =0,ADC2Channel6=0,ADC2Channel7=0; i < 70;)
+    ADC1Channel1 /= 10;
+    ADC1Channel2 /= 10;
+    ADC1Channel3 /= 10;
+    ADC1Channel4 /= 10;
+    ADC1Channel5 /= 10;
+    ADC1Channel6 /= 10;
+    ADC1Channel7 /= 10;
+    ADC1Channel8 /= 10;
+    ADC1Channel9 /= 10;
+    ADC1Channel10 /= 10;
+    ADC1Channel11 /= 10;
+    HAL_Delay(50);
+    // 11 7  15  7
+    HAL_ADC_Start_DMA(&hadc2, (uint32_t *)&ADC2_Value, 70);
+    for (i = 0, ADC2Channel1 = 0, ADC2Channel2 = 0, ADC2Channel3 = 0, ADC2Channel4 = 0, ADC2Channel5 = 0, ADC2Channel6 = 0, ADC2Channel7 = 0; i < 70;)
     {
       ADC2Channel1 += ADC2_Value[i++];
       ADC2Channel2 += ADC2_Value[i++];
@@ -186,16 +215,16 @@ int main(void)
       ADC2Channel6 += ADC2_Value[i++];
       ADC2Channel7 += ADC2_Value[i++];
     }
-     ADC2Channel1 /= 10;
-     ADC2Channel2 /= 10;
-     ADC2Channel3 /= 10;
-     ADC2Channel4 /= 10;
-     ADC2Channel5 /= 10;
-     ADC2Channel6 /= 10;
-     ADC2Channel7 /= 10;
-     HAL_Delay(50);
-    HAL_ADC_Start_DMA(&hadc3, (uint32_t*)&ADC3_Value, 150);
-    for(i = 0,ADC3Channel1 =0,ADC3Channel2=0,ADC3Channel3=0,ADC3Channel4=0,ADC3Channel5 =0,ADC3Channel6=0,ADC3Channel7=0,ADC3Channel8=0,ADC3Channel9 =0,ADC3Channel10=0,ADC3Channel11=0,ADC3Channel12=0,ADC3Channel13=0,ADC3Channel14=0,ADC3Channel15 =0; i < 150;)
+    ADC2Channel1 /= 10;
+    ADC2Channel2 /= 10;
+    ADC2Channel3 /= 10;
+    ADC2Channel4 /= 10;
+    ADC2Channel5 /= 10;
+    ADC2Channel6 /= 10;
+    ADC2Channel7 /= 10;
+    HAL_Delay(50);
+    HAL_ADC_Start_DMA(&hadc3, (uint32_t *)&ADC3_Value, 150);
+    for (i = 0, ADC3Channel1 = 0, ADC3Channel2 = 0, ADC3Channel3 = 0, ADC3Channel4 = 0, ADC3Channel5 = 0, ADC3Channel6 = 0, ADC3Channel7 = 0, ADC3Channel8 = 0, ADC3Channel9 = 0, ADC3Channel10 = 0, ADC3Channel11 = 0, ADC3Channel12 = 0, ADC3Channel13 = 0, ADC3Channel14 = 0, ADC3Channel15 = 0; i < 150;)
     {
       ADC3Channel1 += ADC3_Value[i++];
       ADC3Channel2 += ADC3_Value[i++];
@@ -213,24 +242,24 @@ int main(void)
       ADC3Channel14 += ADC3_Value[i++];
       ADC3Channel15 += ADC3_Value[i++];
     }
-     ADC3Channel1 /= 10;
-     ADC3Channel2 /= 10;
-     ADC3Channel3 /= 10;
-     ADC3Channel4 /= 10;
-     ADC3Channel5 /= 10;
-     ADC3Channel6 /= 10;
-     ADC3Channel7 /= 10;
-     ADC3Channel8 /= 10;
-     ADC3Channel9 /= 10;
-     ADC3Channel10 /= 10;
-     ADC3Channel11 /= 10;
-     ADC3Channel12 /= 10;
-     ADC3Channel13 /= 10;
-     ADC3Channel14 /= 10;
-     ADC3Channel15 /= 10;
-     HAL_Delay(50);
-     HAL_ADC_Start_DMA(&hadc4, (uint32_t*)&ADC4_Value, 70);
-    for(i = 0,ADC4Channel1 =0,ADC4Channel2=0,ADC4Channel3=0,ADC4Channel4=0,ADC4Channel5 =0,ADC4Channel6=0,ADC4Channel7=0; i < 70;)
+    ADC3Channel1 /= 10;
+    ADC3Channel2 /= 10;
+    ADC3Channel3 /= 10;
+    ADC3Channel4 /= 10;
+    ADC3Channel5 /= 10;
+    ADC3Channel6 /= 10;
+    ADC3Channel7 /= 10;
+    ADC3Channel8 /= 10;
+    ADC3Channel9 /= 10;
+    ADC3Channel10 /= 10;
+    ADC3Channel11 /= 10;
+    ADC3Channel12 /= 10;
+    ADC3Channel13 /= 10;
+    ADC3Channel14 /= 10;
+    ADC3Channel15 /= 10;
+    HAL_Delay(50);
+    HAL_ADC_Start_DMA(&hadc4, (uint32_t *)&ADC4_Value, 70);
+    for (i = 0, ADC4Channel1 = 0, ADC4Channel2 = 0, ADC4Channel3 = 0, ADC4Channel4 = 0, ADC4Channel5 = 0, ADC4Channel6 = 0, ADC4Channel7 = 0; i < 70;)
     {
       ADC4Channel1 += ADC4_Value[i++];
       ADC4Channel2 += ADC4_Value[i++];
@@ -240,89 +269,448 @@ int main(void)
       ADC4Channel6 += ADC4_Value[i++];
       ADC4Channel7 += ADC4_Value[i++];
     }
-     ADC4Channel1 /= 10;
-     ADC4Channel2 /= 10;
-     ADC4Channel3 /= 10;
-     ADC4Channel4 /= 10;
-     ADC4Channel5 /= 10;
-     ADC4Channel6 /= 10;
-     ADC4Channel7 /= 10;
-     HAL_Delay(50);
+    ADC4Channel1 /= 10;
+    ADC4Channel2 /= 10;
+    ADC4Channel3 /= 10;
+    ADC4Channel4 /= 10;
+    ADC4Channel5 /= 10;
+    ADC4Channel6 /= 10;
+    ADC4Channel7 /= 10;
+    HAL_Delay(50);
 
-     
+    ADCsum_Value[0] = Slaveboard1_dev_id1;
+    //     	ADCsum_Value[0]=Slaveboard1_dev_id2;
+    //     	ADCsum_Value[0]=Slaveboard1_dev_id3;
+    //     	ADCsum_Value[0]=Slaveboard1_dev_id4;
+    //     	ADCsum_Value[0]=Slaveboard1_dev_id5;
 
-//      printf(" info:ADC1_chanel1_value=%ld \r\n", ADC_Value[1]);
-//      printf(" info:ADC1_chanel2_value=%ld \r\n", ADC_Value[2]);
-//      printf(" info:ADC1_chanel3_value=%ld \r\n", ADC_Value[3]);
-//      printf(" info:ADC1_chanel4_value=%ld \r\n", ADC_Value[4]);
-//      printf(" info:ADC1_chanel5_value=%ld \r\n", ADC_Value[5]);
-//      printf(" info:ADC1_chanel6_value=%ld \r\n", ADC_Value[6]);
-//      printf(" info:ADC1_chanel7_value=%ld \r\n", ADC_Value[7]);
-//      printf(" info:ADC1_chanel8_value=%ld \r\n", ADC_Value[8]);
-//      printf(" info:ADC1_chanel9_value=%ld \r\n", ADC_Value[9]);
-//      printf(" info:ADC1_chanel10_value=%ld \r\n", ADC_Value[10]);
-//      printf(" info:ADC1_chanel11_value=%ld \r\n", ADC_Value[11]);
-    // printf(" info:ADC1_chanel1_value=%ld \r\n", ad1);
-    // printf(" info:ADC1_chanel2_value=%ld \r\n", ad2);
-    // printf(" info:ADC1_chanel3_value=%ld \r\n", ad3);
-    // printf(" info:ADC1_chanel4_value=%ld \r\n", ad4);
-    // printf(" info:ADC1_chanel5_value=%ld \r\n", ad5);
-    // printf(" info:ADC1_chanel6_value=%ld \r\n", ad6);
-    // printf(" info:ADC1_chanel7_value=%ld \r\n", ad7);
-    // printf(" info:ADC1_chanel8_value=%ld \r\n", ad8);
-    // printf(" info:ADC1_chanel9_value=%ld \r\n", ad9);
-    // printf(" info:ADC1_chanel10_value=%ld \r\n", ad10);
-    // printf(" info:ADC1_chanel11_value=%ld \r\n", ad11);
-    // printf(" info:ADC1V_chanel9_value=%ld \r\n", ADC_Value[9]);
-    // printf(" info:ADC1V_chanel10_value=%ld \r\n", ADC_Value[10]);
-    // printf(" info:ADC1V_chanel11_value=%ld \r\n", ADC_Value[11]);
-    // printf(" info:ADC1V_chanel0_value=%ld \r\n", ADC_Value[0]);
+    //     	ADCsum_Value[0]=Slaveboard2_dev_id1;
+    //     	ADCsum_Value[0]=Slaveboard2_dev_id2;
+    //     	ADCsum_Value[0]=Slaveboard2_dev_id3;
+    //     	ADCsum_Value[0]=Slaveboard2_dev_id4;
+    //     	ADCsum_Value[0]=Slaveboard2_dev_id5;
 
-	}
-		// 	printf("\n");
-		// }
+    //    	ADCsum_Value[0]=Slaveboard3_dev_id1;
+    //     	ADCsum_Value[0]=Slaveboard3_dev_id2;
+    //     	ADCsum_Value[0]=Slaveboard3_dev_id3;
+    //     	ADCsum_Value[0]=Slaveboard3_dev_id4;
+    //     	ADCsum_Value[0]=Slaveboard3_dev_id5;
 
-		// printf(" info:ADC1_chanel1_value=%ld \r\n", ad1);
-		// printf(" info:ADC1_chanel2_value=%ld \r\n", ad2);
-		// printf("\n");
+    //    	ADCsum_Value[0]=Slaveboard4_dev_id1;
+    //     	ADCsum_Value[0]=Slaveboard4_dev_id2;
+    //     	ADCsum_Value[0]=Slaveboard4_dev_id3;
+    //     	ADCsum_Value[0]=Slaveboard4_dev_id4;
+    //     	ADCsum_Value[0]=Slaveboard4_dev_id5;
+
+    //    	ADCsum_Value[0]=Slaveboard5_dev_id1;
+    //     	ADCsum_Value[0]=Slaveboard5_dev_id2;
+    //     	ADCsum_Value[0]=Slaveboard5_dev_id3;
+    //     	ADCsum_Value[0]=Slaveboard5_dev_id4;
+    //     	ADCsum_Value[0]=Slaveboard5_dev_id5;
+
+    //       ADCsum_Value = {Slaveboard_id,ADC1Channel1,ADC1Channel2,ADC1Channel3,ADC1Channel4,ADC1Channel10,ADC1Channel5,ADC1Channel6,ADC1Channel7,
+    //     	 ADC1Channel8,ADC1Channel9,ADC1Channel11,ADC2Channel1,ADC2Channel2,ADC2Channel3,ADC2Channel4,ADC2Channel10,ADC2Channel5,ADC2Channel6,ADC2Channel7,
+    //     	 ADC3Channel1,ADC3Channel2,ADC3Channel3,ADC3Channel4,ADC3Channel10,ADC3Channel5,ADC3Channel6,ADC3Channel7,ADC3Channel8,ADC3Channel9,ADC3Channel11,ADC3Channel12,ADC3Channel13,ADC3Channel14,ADC3Channel15,
+    //     	 ADC4Channel1,ADC4Channel2,ADC4Channel3,ADC4Channel4,ADC4Channel10,ADC4Channel5,ADC4Channel6,ADC4Channel7};
 
 
-	  		// ADC_Convert_Value[1]=(ad1>>8) & 0x0f;//high
-	    // 	ADC_Convert_Value[0]=ad1&0xff; //low
+    ADCsum_Value[1] = ADC1Channel1;
+    ADCsum_Value[2] = ADC1Channel2;
+    ADCsum_Value[3] = ADC1Channel3;
+    ADCsum_Value[4] = ADC1Channel4;
+    ADCsum_Value[5] = ADC1Channel5;
+    ADCsum_Value[6] = ADC1Channel6;
+    ADCsum_Value[7] = ADC1Channel7;
+    ADCsum_Value[8] = ADC1Channel8;
+    ADCsum_Value[9] = ADC1Channel9;
+    ADCsum_Value[10] = ADC1Channel10;
+    ADCsum_Value[11] = ADC1Channel11;
 
-	  		// ADC_Convert_Value[3]=(ad2>>8) & 0x0f;//high
-	    // 	ADC_Convert_Value[2]=ad2&0xff; //low
-	    	// HAL_SPI_Transmit_DMA (&hspi1, ADC_Convert_Value, 10);
+    ADCsum_Value[12] = ADC2Channel1;
+    ADCsum_Value[13] = ADC2Channel2;
+    ADCsum_Value[14] = ADC2Channel3;
+    ADCsum_Value[15] = ADC2Channel4;
+    ADCsum_Value[16] = ADC2Channel5;
+    ADCsum_Value[17] = ADC2Channel6;
+    ADCsum_Value[18] = ADC2Channel7;
+
+    ADCsum_Value[19] = ADC3Channel1;
+    ADCsum_Value[20] = ADC3Channel2;
+    ADCsum_Value[21] = ADC3Channel3;
+    ADCsum_Value[22] = ADC3Channel4;
+    ADCsum_Value[23] = ADC3Channel5;
+    ADCsum_Value[24] = ADC3Channel6;
+    ADCsum_Value[25] = ADC3Channel7;
+    ADCsum_Value[26] = ADC3Channel8;
+    ADCsum_Value[27] = ADC3Channel9;
+    ADCsum_Value[28] = ADC3Channel10;
+    ADCsum_Value[29] = ADC3Channel11;
+    ADCsum_Value[30] = ADC3Channel12;
+    ADCsum_Value[31] = ADC3Channel13;
+    ADCsum_Value[32] = ADC3Channel14;
+    ADCsum_Value[33] = ADC3Channel15;
+
+    ADCsum_Value[34] = ADC4Channel1;
+    ADCsum_Value[35] = ADC4Channel2;
+    ADCsum_Value[36] = ADC4Channel3;
+    ADCsum_Value[37] = ADC4Channel4;
+    ADCsum_Value[38] = ADC4Channel5;
+    ADCsum_Value[39] = ADC4Channel6;
+    ADCsum_Value[40] = ADC4Channel7;
+
+//    HAL_SPI_Transmit_DMA(&hspi3, (uint16_t *)ADCsum_Value, 41);
+
+ //	ADCsum_Value change to transmit  ADCconvert_Value[82];
+//    for (i = 1; i < 41; i++)
+//    {
+//      midvalue=ADCsum_Value[i];
+//      ADCconvert_Value[2*i+1] = (ADCsum_Value[i] >> 8) & 0x0f; //high 8bit
+//      ADCconvert_Value[2*i] = midvalue & 0xff;            //low 8bit
+//    }
+    midvalue=Slaveboard1_dev_id1;
+    ADCconvert_Value[0] = Slaveboard1_dev_id1 & 0xff;
+    ADCconvert_Value[1] = (midvalue >> 8) & 0x0f;
+    HAL_Delay(3);
 
 
-//	  		ADC_Convert_Value[5]=(ad3>>8) & 0x0f;//high
-//	    	ADC_Convert_Value[4]=ad3&0xff; //low
-//
-//	  		ADC_Convert_Value[7]=(ad4>>8) & 0x0f;//high
-//	    	ADC_Convert_Value[6]=ad4&0xff; //low
-//
-//	  		ADC_Convert_Value[9]=(ad5>>8) & 0x0f;//high
-//	    	ADC_Convert_Value[8]=ad5&0xff; //low
-//
-//	  		ADC_Convert_Value[11]=(ad6>>8) & 0x0f;//high
-//	    	ADC_Convert_Value[10]=ad6&0xff; //low
-//
-//	  		ADC_Convert_Value[13]=(ad7>>8) & 0x0f;//high
-//	    	ADC_Convert_Value[12]=ad7&0xff; //low
-//
-//	  		ADC_Convert_Value[15]=(ad8>>8) & 0x0f;//high
-//	    	ADC_Convert_Value[14]=ad8&0xff; //low
-//
-//	  		ADC_Convert_Value[17]=(ad9>>8) & 0x0f;//high
-//	    	ADC_Convert_Value[16]=ad9&0xff; //low
-//
-//	  		ADC_Convert_Value[19]=(ad10>>8) & 0x0f;//high
-//	    	ADC_Convert_Value[18]=ad10&0xff; //low
+    midvalue=ADCsum_Value[1];
 
+    ADCconvert_Value[2] = ADCsum_Value[1] & 0xff;
+
+    ADCconvert_Value[3] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[2];
+
+    ADCconvert_Value[4] = ADCsum_Value[2] & 0xff;
+
+    ADCconvert_Value[5] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[3];
+
+    ADCconvert_Value[6] = ADCsum_Value[3] & 0xff;
+
+    ADCconvert_Value[7] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[4];
+
+    ADCconvert_Value[8] = ADCsum_Value[4] & 0xff;
+
+    ADCconvert_Value[9] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[5];
+
+    ADCconvert_Value[10] = ADCsum_Value[5] & 0xff;
+
+    ADCconvert_Value[11] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[6];
+
+    ADCconvert_Value[12] = ADCsum_Value[6] & 0xff;
+
+    ADCconvert_Value[13] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[7];
+
+    ADCconvert_Value[14] = ADCsum_Value[7] & 0xff;
+
+    ADCconvert_Value[15] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[8];
+
+    ADCconvert_Value[16] = ADCsum_Value[8] & 0xff;
+
+    ADCconvert_Value[17] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[9];
+
+    ADCconvert_Value[18] = ADCsum_Value[9] & 0xff;
+
+    ADCconvert_Value[19] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[10];
+
+    ADCconvert_Value[20] = ADCsum_Value[10] & 0xff;
+
+    ADCconvert_Value[21] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[11];
+
+    ADCconvert_Value[22] = ADCsum_Value[11] & 0xff;
+
+    ADCconvert_Value[23] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[12];
+
+    ADCconvert_Value[24] = ADCsum_Value[12] & 0xff;
+
+    ADCconvert_Value[25] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[13];
+
+    ADCconvert_Value[26] = ADCsum_Value[13] & 0xff;
+
+    ADCconvert_Value[27] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[14];
+
+    ADCconvert_Value[28] = ADCsum_Value[14] & 0xff;
+
+    ADCconvert_Value[29] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[15];
+
+    ADCconvert_Value[30] = ADCsum_Value[15] & 0xff;
+
+    ADCconvert_Value[31] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[16];
+
+    ADCconvert_Value[32] = ADCsum_Value[16] & 0xff;
+
+    ADCconvert_Value[33] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[17];
+
+    ADCconvert_Value[34] = ADCsum_Value[17] & 0xff;
+
+    ADCconvert_Value[35] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[18];
+
+    ADCconvert_Value[36] = ADCsum_Value[18] & 0xff;
+
+    ADCconvert_Value[37] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[19];
+
+    ADCconvert_Value[38] = ADCsum_Value[19] & 0xff;
+
+    ADCconvert_Value[39] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[20];
+
+    ADCconvert_Value[40] = ADCsum_Value[20] & 0xff;
+
+    ADCconvert_Value[41] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[21];
+
+    ADCconvert_Value[42] = ADCsum_Value[21] & 0xff;
+
+    ADCconvert_Value[43] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[22];
+
+    ADCconvert_Value[44] = ADCsum_Value[22] & 0xff;
+
+    ADCconvert_Value[45] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[23];
+
+    ADCconvert_Value[46] = ADCsum_Value[23] & 0xff;
+
+    ADCconvert_Value[47] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[24];
+
+    ADCconvert_Value[48] = ADCsum_Value[24] & 0xff;
+
+    ADCconvert_Value[49] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[25];
+
+    ADCconvert_Value[50] = ADCsum_Value[25] & 0xff;
+
+    ADCconvert_Value[51] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[26];
+
+    ADCconvert_Value[52] = ADCsum_Value[26] & 0xff;
+
+    ADCconvert_Value[53] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[27];
+
+    ADCconvert_Value[54] = ADCsum_Value[27] & 0xff;
+
+    ADCconvert_Value[55] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[28];
+
+    ADCconvert_Value[56] = ADCsum_Value[28] & 0xff;
+
+    ADCconvert_Value[57] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[29];
+
+    ADCconvert_Value[58] = ADCsum_Value[29] & 0xff;
+
+    ADCconvert_Value[59] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[30];
+
+    ADCconvert_Value[60] = ADCsum_Value[30] & 0xff;
+
+    ADCconvert_Value[61] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[31];
+
+    ADCconvert_Value[62] = ADCsum_Value[31] & 0xff;
+
+    ADCconvert_Value[63] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[32];
+
+    ADCconvert_Value[64] = ADCsum_Value[32] & 0xff;
+
+    ADCconvert_Value[65] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[33];
+
+    ADCconvert_Value[66] = ADCsum_Value[33] & 0xff;
+
+    ADCconvert_Value[67] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[34];
+
+    ADCconvert_Value[68] = ADCsum_Value[34] & 0xff;
+
+    ADCconvert_Value[69] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[35];
+
+    ADCconvert_Value[70] = ADCsum_Value[35] & 0xff;
+
+    ADCconvert_Value[71] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[36];
+
+    ADCconvert_Value[72] = ADCsum_Value[36] & 0xff;
+
+    ADCconvert_Value[73] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[37];
+
+    ADCconvert_Value[74] = ADCsum_Value[37] & 0xff;
+
+    ADCconvert_Value[75] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[38];
+
+    ADCconvert_Value[76] = ADCsum_Value[38] & 0xff;
+
+    ADCconvert_Value[77] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[39];
+
+    ADCconvert_Value[78] = ADCsum_Value[39] & 0xff;
+
+    ADCconvert_Value[79] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+    midvalue=ADCsum_Value[40];
+
+    ADCconvert_Value[80] = ADCsum_Value[40] & 0xff;
+
+    ADCconvert_Value[81] = (midvalue >> 8) & 0x0f;
+
+    HAL_Delay(3);
+
+
+
+//    HAL_SPI_Transmit_DMA(&hspi3, ADCconvert_Value, 82);
+    HAL_SPI_Transmit(&hspi3, (uint8_t *)ADCconvert_Value, sizeof(ADCconvert_Value), HAL_MAX_DELAY);
+    printf("init ok2");
+    HAL_Delay(500);
+
+    //debug ADCconvert_Value
+//    for (j = 0; j < 82; j++)
+//    {
+//      printf("ADCconvert_Value[%d] = %d \r\n", j, ADCconvert_Value[j]);
+//      HAL_Delay(10);
+//    }
+  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	
+
   /* USER CODE END 3 */
 }
 
@@ -339,12 +727,12 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL2;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
   RCC_OscInitStruct.PLL.PREDIV = RCC_PREDIV_DIV1;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -354,12 +742,12 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -386,10 +774,10 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-	__disable_irq();
-	while (1)
-	{
-	}
+  __disable_irq();
+  while (1)
+  {
+  }
   /* USER CODE END Error_Handler_Debug */
 }
 
