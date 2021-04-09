@@ -32,6 +32,12 @@
 #include "stdlib.h"
 
 //
+
+#define CS_Pin GPIO_PIN_10
+#define CS_GPIO_Port GPIOC
+//#define CS_EXTI_IRQn EXTI4_IRQn
+
+    int flag;
 #ifdef __GNUC__
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 #else
@@ -65,6 +71,24 @@ PUTCHAR_PROTOTYPE
 /* USER CODE BEGIN PV */
 // int count=0;
 // char msg[10];
+
+
+
+/* Private variables ---------------------------------------------------------*/
+/* SPI handler declaration */
+//SPI_HandleTypeDef SpiHandle;
+
+/* Buffer used for transmission */
+uint8_t aTxBuffer[84];
+#define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
+#define BUFFERSIZE                       (COUNTOF(aTxBuffer) - 1)
+/* Buffer used for reception */
+uint8_t aRxBuffer[83];
+
+
+
+
+
 __IO uint32_t uhADCxConvertedValue[11];
 
 uint32_t ADC1_Value[110];
@@ -84,7 +108,7 @@ uint32_t ADC3Channel1, ADC3Channel2, ADC3Channel3, ADC3Channel4, ADC3Channel5, A
 
 uint32_t ADC4Channel1, ADC4Channel2, ADC4Channel3, ADC4Channel4, ADC4Channel5, ADC4Channel6, ADC4Channel7;
 
-uint16_t ADCsum_Value[82],midvalue; //all 40 Channels
+uint16_t ADCsum_Value[41],midvalue; //all 40 Channels
 uint8_t ADCconvert_Value[82]; // for DMA SPI Transmitt
 
 // choose a MCU-Header    "1101" = 1-Slave,  1-board number, 0-nothing, 1-device_id
@@ -169,7 +193,41 @@ int main(void)
   MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
 
-
+//
+//  if(HAL_SPI_Init(&hspi3) != HAL_OK)
+//  {
+//    /* Initialization Error */
+//    Error_Handler();
+//  }
+//
+//
+//  /*##-2- Start the Full Duplex Communication process ########################*/
+//  /* While the SPI in TransmitReceive process, user can transmit data through
+//     "aTxBuffer" buffer & receive data through "aRxBuffer" */
+//  if(HAL_SPI_TransmitReceive_DMA(&hspi3, (uint8_t*)aTxBuffer, (uint8_t *)aRxBuffer, BUFFERSIZE) != HAL_OK)
+//  {
+//    /* Transfer error in transmission process */
+//    Error_Handler();
+//  }
+//
+//
+//  /*##-3- Wait for the end of the transfer ###################################*/
+//  /*  Before starting a new communication transfer, you need to check the current
+//      state of the peripheral; if it�s busy you need to wait for the end of current
+//      transfer before starting a new one.
+//      For simplicity reasons, this example is just waiting till the end of the
+//      transfer, but application may perform other tasks while transfer operation
+//      is ongoing. */
+//  while (HAL_SPI_GetState(&hspi3) != HAL_SPI_STATE_READY)
+//  {
+//  }
+//
+//  /*##-4- Compare the sent and received buffers ##############################*/
+//  if(Buffercmp((uint8_t*)aTxBuffer, (uint8_t*)aRxBuffer, BUFFERSIZE))
+//  {
+//    /* Transfer error in transmission process */
+//    Error_Handler();
+//  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -694,11 +752,26 @@ int main(void)
     HAL_Delay(3);
 
 
+//    HAL_GPIO_WritePin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10,  GPIO_PIN_RESET);
+    HAL_SPI_Transmit_DMA(&hspi3, (uint8_t *)ADCconvert_Value, sizeof((uint8_t *)ADCconvert_Value));
+//    		HAL_GPIO_WritePin(SPI1_NSS_GPIO_Port, SPI1_NSS_Pin, GPIO_PIN_SET);
+    		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_SET);
+    		HAL_Delay(500);
+//
+//    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10,  GPIO_PIN_SET);
+//     HAL_SPI_TransmitReceive(&hspi3, (uint8_t *)ADCconvert_Value,(uint8_t *)ADCconvert_Value,sizeof((uint8_t *)ADCconvert_Value),0xFF);
+//   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_RESET);
+//    HAL_Delay(1000);
+//    HAL_SPI_Transmit_DMA(&hspi3, ADCconvert_Value, 82);, HAL_MAX_DELAY
 
-//    HAL_SPI_Transmit_DMA(&hspi3, ADCconvert_Value, 82);
-    HAL_SPI_Transmit(&hspi3, (uint8_t *)ADCconvert_Value, sizeof(ADCconvert_Value), HAL_MAX_DELAY);
-    printf("init ok2");
-    HAL_Delay(500);
+
+
+
+    //    printf("init ok2");
+//    HAL_Delay(400);
+
+//			  HAL_SPI_Transmit(&hspi3, ADCconvert_Value, 1, 100);
 
     //debug ADCconvert_Value
 //    for (j = 0; j < 82; j++)
@@ -763,7 +836,34 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+//void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
+//{
+// /* Turn LED5 on: Transfer error in reception/transmission process */
+//// BSP_LED_On(LED5);
+//	;
+//}
+//
+///**
+// * @brief  Compares two buffers.
+// * @param  pBuffer1, pBuffer2: buffers to be compared.
+// * @param  BufferLength: buffer's length
+// * @retval 0  : pBuffer1 identical to pBuffer2
+// *         >0 : pBuffer1 differs from pBuffer2
+// */
+//static uint16_t Buffercmp(uint8_t* pBuffer1, uint8_t* pBuffer2, uint16_t BufferLength)
+//{
+// while (BufferLength--)
+// {
+//   if((*pBuffer1) != *pBuffer2)
+//   {
+//     return BufferLength;
+//   }
+//   pBuffer1++;
+//   pBuffer2++;
+// }
+//
+// return 0;
+//}
 /* USER CODE END 4 */
 
 /**
